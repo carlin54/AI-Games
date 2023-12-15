@@ -1,13 +1,12 @@
-import os
 import numpy as np
 from tensorflow import keras
-from tensorflow.keras.models import load_model
-
 from src.minesweeper import Minesweeper
 from src.minesweeper_model import MinesweeperModel
 
+
 class MinesweeperModel9(MinesweeperModel):
     input_width = 9
+
     def __init__(self, model_path, rx, ry):
         self.rx = rx
         self.ry = ry
@@ -39,5 +38,3 @@ class MinesweeperModel9(MinesweeperModel):
         ])
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         return model
-
-

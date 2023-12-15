@@ -5,46 +5,12 @@ import os
 import random
 import time
 from game_data import GameData
-
-current_time = int(time.time())
-np.random.seed(current_time)
-
-
-def actions_to_inputs_v3(actions, state, solution, bombs, rx, ry):
-    inputs = list()
-    input_width = 1
-    samples = np.ones((len(actions), input_width))
-    for i, action in enumerate(actions):
-        x, y = action
-        samples[i, 0] = not bombs[x, y]
-
-    return samples
-
-
-def actions_to_inputs_v2(actions, state, solution, rx, ry):
-    inputs = list()
-    input_width = 9
-    samples = np.zeros((len(actions), rx * ry * input_width))
-    for i, action in enumerate(actions):
-        x, y = action
-        for dx, dy in np.ndindex((rx, ry)):
-            px = x + dx - rx // 2
-            py = y + dy - ry // 2
-            data_offset = (dx * rx * input_width) + dy * input_width
-
-            if not in_bounds(px, py, state):
-                continue
-
-            index = solution[px, py]
-            samples[i, data_offset + index] = 1
-
-    return samples
-
-
 from minesweeper import Minesweeper
 from minesweeper_model9 import MinesweeperModel9
 from minesweeper_model11 import MinesweeperModel11
 
+current_time = int(time.time())
+np.random.seed(current_time)
 
 def test_model(model, num_games=1000, game_parameters=None, verbose=False):
     if game_parameters is None:
@@ -162,23 +128,3 @@ with open('results.json', 'w') as file:
     json.dump({
         "results9": results9,
     }, file)
-
-"""
-inputs = actions_to_inputs(actions, state, solution, rx, ry)
-bomb_predictions = bomb_model.predict(inputs, verbose=None)
-outputs = bombs[X, Y].astype(np.float64)
-outputs = outputs.reshape((*outputs.shape, 1))
-metrics = bomb_model.train_on_batch(inputs, outputs)
-bomb_accuracy.append(metrics[1])
-
-# Train safe
-safe_predictions = safe_model.predict(inputs, verbose=None)
-outputs = 1.0 - bombs[X, Y].astype(np.float64)
-outputs = outputs.reshape((*outputs.shape, 1))
-metrics = safe_model.train_on_batch(inputs, outputs)
-safe_accuracy.append(metrics[1])
-
-# Select the 'Safest'
-sx, sy = actions[np.argmax(safe_predictions)]
-state = select(sx, sy, state, solution, bombs)
-"""

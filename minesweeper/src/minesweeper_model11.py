@@ -1,6 +1,5 @@
 import numpy as np
 from tensorflow import keras
-
 from minesweeper import Minesweeper
 from minesweeper_model import MinesweeperModel
 

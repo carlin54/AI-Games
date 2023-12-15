@@ -1,14 +1,13 @@
 import os
 import numpy as np
-from tensorflow import keras
 from tensorflow.keras.models import load_model
-from src.minesweeper import Minesweeper
 import random
 
 
 class MinesweeperModel:
 
     def __init__(self, model_path):
+        self.model = None
         self.load_or_create_model(model_path)
 
     def load_or_create_model(self, model_path):
